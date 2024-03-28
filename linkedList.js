@@ -1,4 +1,3 @@
-console.log("Working...");
 class LinkedList{
     constructor(){
         this.head = null;
@@ -10,18 +9,20 @@ class LinkedList{
             this.head = new Node(value, null);
             this.size ++;
         }
-        let current = this.head;
-        while(current){
-            if(current.nextNode == null){
-                current.nextNode = new Node(value, null);
-                this.tail = current.nextNode;
-                this.size++;
-                break;
+        else{
+            let current = this.head;
+            while(current){
+                if(current.nextNode == null){
+                    current.nextNode = new Node(value, null);
+                    this.tail = current.nextNode;
+                    this.size++;
+                    break;
+                }
+                else{
+                    current = current.nextNode;
+                }
+                
             }
-            else{
-                current = current.nextNode;
-            }
-            
         }
     }
     prepend(value){
@@ -54,29 +55,138 @@ class LinkedList{
         }
         return current.value;
     }
-    //TODO  removes the last element from the list
+    update_Head_Tail(){
+        let current = this.head;
+        while(current){
+            if(current.nextNode == null){
+                this.tail = current;
+                break;
+            }
+            else{
+                current = current.nextNode;
+            }
+        }
+    }
     pop(){
-
+        if(this.size == 0){
+            return null;
+        }
+        let current = this.head;
+        while(current){
+            if(current.nextNode.nextNode == null){
+                current.nextNode = null;
+                this.tail = current;
+                this.size -= 1;
+                break;
+            }
+            else{
+                current = current.nextNode;
+            }
+            
+        }
     }
-    //TODO  returns true if the passed in value is in the list and otherwise returns false.
     contains(value){
-
+        let current = this.head;
+        while(current){
+            if(current.value == value){
+                return true;
+            }
+            else{
+                current = current.nextNode;
+            }
+            
+        }
+        return false;
     }
-
-    //TODO  returns the index of the node containing value, or null if not found.
     find(value){
-
+        let index = 0;
+        let current = this.head;
+        while(current){
+            if(current.value == value){
+                return index;
+            }
+            else{
+                current = current.nextNode;
+                index++;
+            }
+            
+        }
+        return null;
     }
-    //TODO represents your LinkedList objects as strings, so you can print them out and preview them in the console. 
-    //TODO The format should be: ( value ) -> ( value ) -> ( value ) -> null
     toString(){
-
+        let finalString = "";
+        let current = this.head;
+        while(current){
+            finalString += `( ${current.value} ) -> `;
+            current = current.nextNode;
+        }
+        finalString += `${null}`;
+        return finalString;
+    }
+    removeAt(index){
+        if(index == 0){
+            let next = this.head.nextNode;
+            this.head = next;
+            this.size -= 1;
+            this.head = next;
+        }
+        else{
+            if(index < 0){
+                index = this.size -   (-1 * index);
+            }
+            if((index) >= this.size || index < 0){
+                return "out of range"
+            }
+            let current = this.head;
+            let previos = null;
+            let next = null;
+            while(index>0){
+                previos = current;
+                current = current.nextNode;
+                next = current.nextNode;
+                index--;
+            }
+            previos.nextNode = next;
+            this.size -= 1;
+            this.update_Head_Tail();
+        }
+    }
+    insertAt(value, index){
+        if(index == 0){
+            let current = this.head;
+            this.head = new Node(value, current);
+            this.size++;
+        }
+            else{
+                
+            if(index < 0){
+                index = this.size - (-1 * index);
+            }
+            console.log(index, this.size);
+            if(index >= this.size || index < 0){
+                console.log("out of range"); 
+                
+            }
+            else{
+                let current = this.head;
+                let previos = null;
+                while(index>0){
+                    previos = current;
+                    current = current.nextNode;
+                    index -= 1;
+                }
+                previos.nextNode = new Node(value, current);
+                this.size++;
+            }
+        }
     }
     printListData(){
         let current = this.head;
+        
         while(current){
             console.log(current.value);
             current = current.nextNode;
+            
         }
     }
 
@@ -89,12 +199,12 @@ class Node{
 }
 let linkedList = new LinkedList;
 
-linkedList.prepend(5);
-linkedList.prepend(2);
-linkedList.append(15);
+linkedList.append(3);
+linkedList.append(4);
+linkedList.append(5);
+linkedList.append(6);
+linkedList.append(7);
+linkedList.prepend(1);
+linkedList.append(28);
 
-linkedList.printListData();
-console.log("size:", linkedList.size);
-console.log("head:", linkedList.head.value);
-console.log("tail:", linkedList.tail.value);
-console.log("valueInIndex:",linkedList.at(0));
+console.log(linkedList.toString());
